@@ -3,6 +3,7 @@ This python class provides resonance information using semianalytic methods deve
 
 Only restricted case has been developed yet.
 Only works in linux systems for now.
+User must have installed numpy, matplotlib and gfortran compiler as the core code was written in FORTRAN <3 
 
 User must initialize a resonance as follows:
 
