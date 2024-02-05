@@ -5,6 +5,7 @@ Only restricted case has been developed yet.
 Only works in linux systems for now.
 
 User must initialize a resonance as follows:
+
 reso1 = semianalyticResonance(star_mass, a_pla, e_pla, pla_mass, k, kp, e, inc, argper, lonNod)
 
 The class semianalyticResonance() currently has six methods
