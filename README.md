@@ -1,8 +1,8 @@
 # semianalyticResonance
 This python class provides resonance information using semianalytic methods developed in Gallardo (2020, CMDA 132:9)
 
-Only restricted case has been developed yet.
-Only works in linux systems for now.
+Only restricted case has been developed so far.
+Only works in linux systems so far.
 User must have installed numpy, matplotlib and gfortran compiler as the core code was written in FORTRAN <3 
 
 User must initialize a resonance as follows:
