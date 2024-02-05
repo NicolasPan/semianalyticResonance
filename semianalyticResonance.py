@@ -163,17 +163,3 @@ class semianalyticResonance: #Podriamos hacer dos clases, una para el caso restr
         import numpy as np
         per = np.loadtxt('resoGenSalida.sal')
         print("Resonant periods are", per, "yr")
-        
-    # Podemos añadir mas metodos como por ejemplo el año maximo o el 
-    # periodo de libracion de cada objeto
-    #La idea es poder unir esta clase con REBOUND para poder hacer un git commit
-    #Tambien podriamos hacer que se agregue un metodo que usando rebound
-    # y el nombre del objeto integrar por cierto tiempo y con cierta
-    # cantidad de clones. Ademas podriamos integrar REBOUNDx agregando
-    # distintas fuerzas
-    
-#%%
-
-reso1 = semianalyticResonance(1.0, 5.0, 0.01, 5e-5, 1, 1, 0.2, 10.0, 0.0, 0.0)
-
-reso1.period()
