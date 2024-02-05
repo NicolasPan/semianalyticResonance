@@ -114,13 +114,55 @@ class semianalyticResonance: #Podriamos hacer dos clases, una para el caso restr
             sig = np.array([float(line.strip()) for line in file])
         print('Equilibrium points are in sigma = ',sig)
         
-        # This method returns the sigma values
+        # To let the method return the sigma values 
         # print(sig)
-        return sig 
+        # return sig 
 
     # This method gives the width of the resonant configuration
     def width(self):
         print("width is a Work in progress")
+        
+        import subprocess
+        source = "ResoGenWidth.f"
+        output = "reso.exe"
+        subprocess.run(["gfortran", source, "-o", output])
+        exe_path = "./" + output
+        
+        with open("plasys.inp","w") as file:
+            lines=["STAR: mass of the star in solar masses\n",str(self.star_mass)+"\n",
+                    "PLANETS: a e mass, put one line per planet and a comment line after the last one\n",
+                    str(self.a_pla)+" "+str(self.e_pla)+" "+str(self.pla_mass)+"\n","ccccccccccccccccccccccccccccccccc comment line"]
+            file.writelines(lines)
+        input_data = str(1) +"\n"+ str(self.k) +"\n"+ str(self.kp) +"\n"+ str(self.e) +"\n"+ str(self.inc) +"\n"+ str(self.argper) +"\n"+ str(self.lonNod)
+        result = subprocess.run([exe_path], stdout=subprocess.PIPE , text = True, input=input_data)
+        
+        import numpy as np
+        an = np.loadtxt('resoGenSalida.sal')
+        print("Resonance width is", an, "astronomical units")
+        
+    def period(self):
+        print("period is a Work in progress")
+        #It will add to equilibrium points the values of the periods
+        
+        # we first compile the fortran code
+        import subprocess
+        source = "ResoGenPeriod.f"
+        output = "reso.exe"
+        subprocess.run(["gfortran", source, "-o", output])
+        exe_path = "./" + output
+        
+        # then write the initial file
+        with open("plasys.inp","w") as file:
+            lines=["STAR: mass of the star in solar masses\n",str(self.star_mass)+"\n",
+                    "PLANETS: a e mass, put one line per planet and a comment line after the last one\n",
+                    str(self.a_pla)+" "+str(self.e_pla)+" "+str(self.pla_mass)+"\n","ccccccccccccccccccccccccccccccccc comment line"]
+            file.writelines(lines)
+        input_data = str(1) +"\n"+ str(self.k) +"\n"+ str(self.kp) +"\n"+ str(self.e) +"\n"+ str(self.inc) +"\n"+ str(self.argper) +"\n"+ str(self.lonNod)
+        result = subprocess.run([exe_path], stdout=subprocess.PIPE , text = True, input=input_data)
+        
+        import numpy as np
+        per = np.loadtxt('resoGenSalida.sal')
+        print("Resonant periods are", per, "yr")
         
     # Podemos añadir mas metodos como por ejemplo el año maximo o el 
     # periodo de libracion de cada objeto
@@ -129,12 +171,9 @@ class semianalyticResonance: #Podriamos hacer dos clases, una para el caso restr
     # y el nombre del objeto integrar por cierto tiempo y con cierta
     # cantidad de clones. Ademas podriamos integrar REBOUNDx agregando
     # distintas fuerzas
-        
+    
 #%%
-# As an example we initialize a resonance
+
 reso1 = semianalyticResonance(1.0, 5.0, 0.01, 5e-5, 1, 1, 0.2, 10.0, 0.0, 0.0)
 
-ancho = 0.1
-niveles = 10
-
-reso1.sigmas()
+reso1.period()
