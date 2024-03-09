@@ -20,3 +20,9 @@ The class semianalyticResonance() currently has six methods
 ¡Check the example!
 
 Further detailed documentation and examples are in development.
+
+In adittion to the mentioned class we provide a simple python version of Superatlas, an easy way to plot resonance shapes.
+As an example check funcion_varios_atlas.py which generates the next plot:
+
+![image](https://github.com/NicolasPan/semianalyticResonance/assets/120610601/0ef3296a-1870-4487-8391-37ad93b84054)
+
