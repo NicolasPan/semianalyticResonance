@@ -7,7 +7,7 @@
 class semianalyticResonance: #Podriamos hacer dos clases, una para el caso restricto y otra para el problema completo
     
     # First we initialice the object with the 9 variables given
-    def __init__(self,star_mass, a_pla, e_pla, pla_mass, k, kp, e, inc, argper, lonNod):
+    def __init__(self,star_mass, a_pla, e_pla, pla_mass, kp, k, e, inc, argper, lonNod):
         self.star_mass = star_mass
         self.a_pla = a_pla
         self.e_pla = e_pla
@@ -21,7 +21,7 @@ class semianalyticResonance: #Podriamos hacer dos clases, una para el caso restr
 
     # This method shows the user what resonance is he working with
     def which_resonance(self):
-        print(f"You are working with the resonance {self.k} : {self.kp}")
+        print(f"You are working with the resonance {self.kp} : {self.k}")
         
     # This method prints the units used in the code
     def which_units(self):
@@ -55,7 +55,7 @@ class semianalyticResonance: #Podriamos hacer dos clases, una para el caso restr
                     str(self.a_pla)+" "+str(self.e_pla)+" "+str(self.pla_mass)]
             file.writelines(lines)
         lonPer = self.lonNod + self.argper
-        input_data = str(self.k) +"\n"+ str(self.kp) +"\n"+ str(self.e) +"\n" + str(self.inc) +"\n"+ str(self.lonNod) +"\n"+ str(lonPer) +"\n"+ str(a_width)
+        input_data = str(self.kp) +"\n"+ str(self.k) +"\n"+ str(self.e) +"\n" + str(self.inc) +"\n"+ str(self.lonNod) +"\n"+ str(lonPer) +"\n"+ str(a_width)
         
         # Run the code and save the results
         import os
@@ -103,7 +103,7 @@ class semianalyticResonance: #Podriamos hacer dos clases, una para el caso restr
                     "PLANETS: a e mass, put one line per planet and a comment line after the last one\n",
                     str(self.a_pla)+" "+str(self.e_pla)+" "+str(self.pla_mass)+"\n","ccccccccccccccccccccccccccccccccc comment line"]
             file.writelines(lines)
-        input_data = str(1) +"\n"+ str(self.k) +"\n"+ str(self.kp) +"\n"+ str(self.e) +"\n"+ str(self.inc) +"\n"+ str(self.argper) +"\n"+ str(self.lonNod)
+        input_data = str(1) +"\n"+ str(self.kp) +"\n"+ str(self.k) +"\n"+ str(self.e) +"\n"+ str(self.inc) +"\n"+ str(self.argper) +"\n"+ str(self.lonNod)
         
         # Run the code
         result = subprocess.run([exe_path], stdout=subprocess.PIPE , text = True, input=input_data)
@@ -133,7 +133,7 @@ class semianalyticResonance: #Podriamos hacer dos clases, una para el caso restr
                     "PLANETS: a e mass, put one line per planet and a comment line after the last one\n",
                     str(self.a_pla)+" "+str(self.e_pla)+" "+str(self.pla_mass)+"\n","ccccccccccccccccccccccccccccccccc comment line"]
             file.writelines(lines)
-        input_data = str(1) +"\n"+ str(self.k) +"\n"+ str(self.kp) +"\n"+ str(self.e) +"\n"+ str(self.inc) +"\n"+ str(self.argper) +"\n"+ str(self.lonNod)
+        input_data = str(1) +"\n"+ str(self.kp) +"\n"+ str(self.k) +"\n"+ str(self.e) +"\n"+ str(self.inc) +"\n"+ str(self.argper) +"\n"+ str(self.lonNod)
         result = subprocess.run([exe_path], stdout=subprocess.PIPE , text = True, input=input_data)
         
         import numpy as np
@@ -157,7 +157,7 @@ class semianalyticResonance: #Podriamos hacer dos clases, una para el caso restr
                     "PLANETS: a e mass, put one line per planet and a comment line after the last one\n",
                     str(self.a_pla)+" "+str(self.e_pla)+" "+str(self.pla_mass)+"\n","ccccccccccccccccccccccccccccccccc comment line"]
             file.writelines(lines)
-        input_data = str(1) +"\n"+ str(self.k) +"\n"+ str(self.kp) +"\n"+ str(self.e) +"\n"+ str(self.inc) +"\n"+ str(self.argper) +"\n"+ str(self.lonNod)
+        input_data = str(1) +"\n"+ str(self.kp) +"\n"+ str(self.k) +"\n"+ str(self.e) +"\n"+ str(self.inc) +"\n"+ str(self.argper) +"\n"+ str(self.lonNod)
         result = subprocess.run([exe_path], stdout=subprocess.PIPE , text = True, input=input_data)
         
         import numpy as np
