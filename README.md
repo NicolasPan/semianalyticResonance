@@ -7,10 +7,10 @@ User must have installed numpy, matplotlib and gfortran compiler as the core cod
 
 User must initialize a resonance as follows:
 
-reso1 = semianalyticResonance(star_mass, a_pla, e_pla, pla_mass, k, kp, e, inc, argper, lonNod)
+reso1 = semianalyticResonance(star_mass, a_pla, e_pla, pla_mass, kp, k, e, inc, argper, lonNod)
 
 The class semianalyticResonance() currently has six methods
-  1) which_resonance() prints the resonance
+  1) which_resonance() prints the resonance as kp:k
   2) which_units() prints the units used in the code
   3) width() wich gives stable width
   4) sigmas() which gives equilibrium points
