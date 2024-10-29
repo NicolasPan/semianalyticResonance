@@ -4,7 +4,7 @@
 from semianalyticResonance import semianalyticResonance
 
 # Generate a pyton object called reso1
-#                    (star_mass, a_pla, e_pla, pla_mass, k, kp, e, inc, argper, lonNod)
+#                    (star_mass, a_pla, e_pla, pla_mass, kp, k, e, inc, argper, lonNod)
 reso1 = semianalyticResonance(1.0, 5.0, 0.01, 5e-5, 1, 1, 0.2, 10.0, 0.0, 0.0)
 
 #We can check what resonance are we working with
