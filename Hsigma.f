@@ -3,7 +3,7 @@ C PROGRAM calculation H(sigma,a) Tabare Gallardo
       CHARACTER*50 APESO
 C CRITICAL ANGLE AND HAMILTONIAN
       DIMENSION SMA(400),HA(400)
-      COMMON NP,NPQ,A1,E1,J1,L1,P1,A2nom,E2,J2,L2,P2
+      COMMON KK,KP,A1,E1,J1,L1,P1,A2nom,E2,J2,L2,P2
       TWOPI = 8.0D0*DATAN(1.0D0)
       CERO  = 0.0D0
       UNO   = 1.0D0
@@ -28,18 +28,15 @@ C CRITICAL ANGLE AND HAMILTONIAN
       READ(1,*) A1,E1,SM1
       CLOSE(1)
 
-      WRITE(*,*)'RESONANCE |p+q|,|p| ?'
+      WRITE(*,*)'RESONANCE ?'
       WRITE(*,*)'(ex. 2,3 for plutinos; 3,2 for hildas)'
-      READ(*,*) NPQ,NP
-C NPQ=|P+Q|
-C NP=|P|
-C ORDER q
-      ORQ=DABS(NPQ-NP)
-      IF(NPQ.LE.NP) THEN
-C IT IS AN EXTERIOR RESONANCE  OR TROJANS
-        NPQ=-NPQ
-        NP=-NP
+      READ(*,*) KP,KK
+C MAXIMUM FOR CALCULATION OF THE INTEGRAL WITH ENOUGH PRECISION
+      MAXFAC=KP
+      IF(KK.GT.KP) THEN
+        MAXFAC=KK
       ENDIF
+C sigma = k*lambda - kp*lambda_p + (kp-k)*varpi
       WRITE(*,*)'ASTEROID''S ORBITAL ELEMENTS:  e,i,lonod,loper'
       READ(*,*)EXC,YNC,lonod,loper
       WRITE(*,*)'width in au for plotting?'
@@ -53,7 +50,7 @@ c planet mean motion
       mmp=dsqrt(kg2*(STARM+sm1)/a1**3)
 C PARTICLE IS 2
 c resonant particle mean motion
-      mmr=dabs(npq/np)*mmp
+      mmr=dabs(KP/KK)*mmp
 C A2 NOMINAL
 C ERROR CORRECTED APRIL 2025  --------------------------------------
 C      A2NOM=(kg2/mmr**2)**(1.D0/3.D0)
@@ -76,14 +73,12 @@ C NUMBER OF EVALUATIONS OF R(sigma) BETWEEN O AND 360
       ISIMAX=360
 
 C varying critical angle from 0 to 360
-C NEW DIFINITION sigma = p*lambda - (p+q)*lambda_p + q*varpi
-C coherent with sigma definition in Resonalyzer
       DO ISI=1,ISIMAX
 C ACRIT IS SIGMA
         ACRIT=DFLOAT(ISI-1)/DFLOAT(ISIMAX)*360.D0
 C TETA IS THE COMBINATION OF LAMBDAS
 C        TETA=ACRIT+ORQ*LOPER
-        TETA=ACRIT - ORQ*LOPER
+        TETA=ACRIT - (KP-KK)*LOPER
 C TO RADIANS
         TETAR=TETA*G2R
         TETAR=DMOD(TETAR,TWOPI)
@@ -94,8 +89,8 @@ C INTEGRAL LAMBDA_PLA
 C INITIAL STEP 1 DEGREE
         PASO=1.D0
         LA1G=-PASO
-C LAMBDA PLANET FROM 0 TO 360*NP
-        LIMIT=360.D0*DABS(NP)
+C LAMBDA PLANET FROM 0 TO 360*KK
+        LIMIT=360.D0*DABS(KK)
    88   LA1G= LA1G + PASO
 C CALCULATE DISTURBING FUNCTION A DISTANCE
         CALL RCALC(LA1G,TETAR,RPER,DELTA)
@@ -106,9 +101,9 @@ C WE GOT 360*NP, WE DO NOT COMPUTE THE INTEGRAL (IS THE SAME THAN 0)
         TINTEGRAL=TINTEGRAL+RPER*PASO
         GOTO 88
 C CRUDE INTEGRAL
-  99    RTOT=TINTEGRAL/(360.D0*DABS(NP))
+  99    RTOT=TINTEGRAL/(360.D0*DABS(KK))
 C NOW CALCULATE HAMILTONIAN  BUG CORRECTED, MISSED STARM
-        HA(ISI)=-KG2*STARM/2.D0/A2 -mmp*DSQRT(kg2*STARM*A2)*dabs(npq/np)
+        HA(ISI)=-KG2*STARM/2.D0/A2 -mmp*DSQRT(kg2*STARM*A2)*dabs(KP/KK)
      *- RTOT*SM1*KG2
         SMA(ISI)=ACRIT
       ENDDO
@@ -128,7 +123,7 @@ C********************************************************************
 C********************************************************************
       SUBROUTINE RCALC(LA1G,TETAR,RPER,DELTA)
       IMPLICIT REAL*8 (A-H,J-Z)
-      COMMON NP,NPQ,A1,E1,J1,L1,P1,A2nom,E2,J2,L2,P2
+      COMMON KK,KP,A1,E1,J1,L1,P1,A2nom,E2,J2,L2,P2
       TWOPI = 8.0D0*DATAN(1.0D0)
       CERO  = 0.0D0
       UNO   = 1.0D0
@@ -167,7 +162,7 @@ C RADIUS VECTOR FOR planet
 C PARTICLE+++++++++++++++++++++++++++++++++++++++++++++++++++++
 C GIVEN LAMBDA PLANET CALCULATE LAMBDA PARTICLE
 C      LA2=(NPQ*LA1-TETAR)/NP
-      LA2=(NPQ*LA1 + TETAR)/NP
+      LA2=(KP*LA1 + TETAR)/KK
 C MEAN ANOMALY PARTICLE
       AM2=LA2-P2
  202  IF (AM2.GT.TWOPI) THEN
