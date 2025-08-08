@@ -16,6 +16,8 @@ C CRITICAL ANGLE AND HAMILTONIAN
       WRITE(*,*)'level curves for H(sigma,a)   '
       WRITE(*,*)'Gallardo 2020, CMDA 132 9'
       WRITE(*,*)'Tabare Gallardo                gallardo@fisica.edu.uy '
+      WRITE(*,*)'bug STARM corrected in April 2025'
+      WRITE(*,*)'bug sigma definition correction in August 2025'
       WRITE(*,*)'------------------------------------------------------'
       WRITE(*,*)'eccentric planet with i=lonod=loper=0'
 
@@ -53,7 +55,10 @@ C PARTICLE IS 2
 c resonant particle mean motion
       mmr=dabs(npq/np)*mmp
 C A2 NOMINAL
-      A2NOM=(kg2/mmr**2)**(1.D0/3.D0)
+C ERROR CORRECTED APRIL 2025  --------------------------------------
+C      A2NOM=(kg2/mmr**2)**(1.D0/3.D0)
+
+      A2NOM=(kg2*starm/mmr**2)**(1.D0/3.D0)
 
       DELA=CHOAN/50.D0
       A2=A2NOM-DELA*25.D0
@@ -71,12 +76,14 @@ C NUMBER OF EVALUATIONS OF R(sigma) BETWEEN O AND 360
       ISIMAX=360
 
 C varying critical angle from 0 to 360
-C sigma = (p+q)*lambda_p - p*lambda - q*varpi
+C NEW DIFINITION sigma = p*lambda - (p+q)*lambda_p + q*varpi
+C coherent with sigma definition in Resonalyzer
       DO ISI=1,ISIMAX
 C ACRIT IS SIGMA
         ACRIT=DFLOAT(ISI-1)/DFLOAT(ISIMAX)*360.D0
 C TETA IS THE COMBINATION OF LAMBDAS
-        TETA=ACRIT+ORQ*LOPER
+C        TETA=ACRIT+ORQ*LOPER
+        TETA=ACRIT - ORQ*LOPER
 C TO RADIANS
         TETAR=TETA*G2R
         TETAR=DMOD(TETAR,TWOPI)
@@ -100,9 +107,9 @@ C WE GOT 360*NP, WE DO NOT COMPUTE THE INTEGRAL (IS THE SAME THAN 0)
         GOTO 88
 C CRUDE INTEGRAL
   99    RTOT=TINTEGRAL/(360.D0*DABS(NP))
-C NOW CALCULATE HAMILTONIAN
-        HA(ISI)=-KG2/2.D0/A2 -mmp*DSQRT(kg2*A2)*dabs(npq/np) -
-     *RTOT*SM1*KG2
+C NOW CALCULATE HAMILTONIAN  BUG CORRECTED, MISSED STARM
+        HA(ISI)=-KG2*STARM/2.D0/A2 -mmp*DSQRT(kg2*STARM*A2)*dabs(npq/np)
+     *- RTOT*SM1*KG2
         SMA(ISI)=ACRIT
       ENDDO
 C OUTPUT
@@ -159,7 +166,8 @@ C RADIUS VECTOR FOR planet
 
 C PARTICLE+++++++++++++++++++++++++++++++++++++++++++++++++++++
 C GIVEN LAMBDA PLANET CALCULATE LAMBDA PARTICLE
-      LA2=(NPQ*LA1-TETAR)/NP
+C      LA2=(NPQ*LA1-TETAR)/NP
+      LA2=(NPQ*LA1 + TETAR)/NP
 C MEAN ANOMALY PARTICLE
       AM2=LA2-P2
  202  IF (AM2.GT.TWOPI) THEN
