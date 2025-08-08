@@ -43,7 +43,7 @@ class semianalyticResonance: #Podriamos hacer dos clases, una para el caso restr
         
         # First compile the Fortran code
         import subprocess
-        source = "Hsigmaa.f"
+        source = "Hsigma.f"
         output = "Hamilt.exe"
         subprocess.run(["gfortran", source, "-o", output])
         exe_path = "./" + output
